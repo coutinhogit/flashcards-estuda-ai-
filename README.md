@@ -3,7 +3,7 @@
 ![Preview do Projeto](https://i.ibb.co/xp0zdC2/Captura-de-tela-2026-01-11-155628.png)
 
 ## 🔗 Acesse o Projeto
- **Link Online:** [FlashCards.Ai](https://flash-cards-estuda-ai-fn7j-8rg1bq77g-coutinhos-projects.vercel.app/login)
+ **Link Online:** [FlashCards.Ai](https://flash-cards-estuda-ai-fn7j.vercel.app/login)
 
 ## 📌 Objetivo do Projeto FlashCards(Estuda.ai)
 O projeto surgiu como uma tentativa de trazer a democratização do acesso ao ensino(onde muitos falam e poucos agem), e tentar trazer métodos de estudos dinâmicos para estudantes de vestibulares de todo o Brasil e todas as classes, o *FlashCards -  Estuda.ai* é o primeiro de muitos projetos da iniciativa a qual eu batizei como *Estuda.ai* que ainda vão surgir de minha autoria para tentar trazer o acesso à educação de forma equânime no nosso país! Além disso também deixei disponível uma versão para quem ja está na Faculdade/Universidade, porém gosta de estudar com os famigerados "FlashCards", portanto sinta-se livre para usar como bem entender!
