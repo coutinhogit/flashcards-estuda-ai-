@@ -1,0 +1,368 @@
+<div class="flex h-screen w-full font-display text-slate-900 bg-background-light">
+
+    <aside 
+        class="flex-shrink-0 border-r border-slate-200 bg-surface-light flex flex-col justify-between p-4 hidden md:flex transition-all duration-300 relative group"
+        [class.w-64]="!isSidebarCollapsed()"
+        [class.w-20]="isSidebarCollapsed()">
+        
+        <button (click)="toggleSidebar()" 
+                class="absolute -right-3 top-9 bg-white border border-slate-200 rounded-full p-1 shadow-sm text-slate-400 hover:text-primary transition-colors z-50">
+            <span class="material-symbols-outlined text-[16px]">
+                {{ isSidebarCollapsed() ? 'chevron_right' : 'chevron_left' }}
+            </span>
+        </button>
+
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-3 px-2 overflow-hidden whitespace-nowrap" 
+                 [class.justify-center]="isSidebarCollapsed()">
+                <div class="flex-shrink-0 flex items-center justify-center size-10 rounded-md bg-primary text-white">
+                    <span class="material-symbols-outlined text-[28px]">school</span>
+                </div>
+                
+                @if (!isSidebarCollapsed()) {
+                    <div class="flex flex-col animate-fade-in">
+                        <h1 class="text-base font-bold leading-tight">FlashCards.ai</h1>
+                        <p class="text-slate-500 text-xs font-normal">Estuda.ai</p>
+                    </div>
+                }
+            </div>
+
+            <nav class="flex flex-col gap-2">
+                <a (click)="setView('HOME')"
+                   [class.bg-primary-10]="currentView() === 'HOME'"
+                   [class.text-primary]="currentView() === 'HOME'"
+                   [class.text-slate-600]="currentView() !== 'HOME'"
+                   [class.justify-center]="isSidebarCollapsed()"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors cursor-pointer hover:bg-slate-100 overflow-hidden whitespace-nowrap"
+                   title="Início"> 
+                    <span class="material-symbols-outlined text-[24px] flex-shrink-0" [class.fill-1]="currentView() === 'HOME'">dashboard</span>
+                    
+                    @if (!isSidebarCollapsed()) {
+                        <span class="text-sm font-semibold animate-fade-in">Início</span>
+                    }
+                </a>
+
+                <a (click)="setView('MY_DECKS')"
+                   [class.bg-primary-10]="currentView() === 'MY_DECKS'"
+                   [class.text-primary]="currentView() === 'MY_DECKS'"
+                   [class.text-slate-600]="currentView() !== 'MY_DECKS'"
+                   [class.justify-center]="isSidebarCollapsed()"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors cursor-pointer hover:bg-slate-100 overflow-hidden whitespace-nowrap"
+                   title="Meus Baralhos">
+                   
+                    <span class="material-symbols-outlined text-[24px] flex-shrink-0" [class.fill-1]="currentView() === 'MY_DECKS'">book_2</span>
+                    
+                    @if (!isSidebarCollapsed()) {
+                        <span class="text-sm font-medium animate-fade-in">Meus Baralhos</span>
+                    }
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <button (click)="openCreateModal()"
+                [class.px-0]="isSidebarCollapsed()"
+                [class.justify-center]="isSidebarCollapsed()"
+                class="flex w-full items-center gap-2 rounded-md bg-primary py-3 px-4 text-sm font-bold text-white shadow-lg hover:bg-primary-hover transition-all overflow-hidden whitespace-nowrap"
+                title="Criar Novo Deck">
+                
+                <span class="material-symbols-outlined text-[20px] flex-shrink-0">add_circle</span>
+                
+                @if (!isSidebarCollapsed()) {
+                    <span class="animate-fade-in">Criar Novo Deck</span>
+                }
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light relative">
+
+        <header
+            class="flex h-16 items-center justify-between border-b border-slate-200 bg-surface-light px-6 py-3 sticky top-0 z-20">
+
+            <div class="hidden md:flex flex-1 max-w-md">
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input
+                        class="block w-full rounded-sm border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-500 focus:ring-2 focus:ring-primary outline-none"
+                        placeholder="Buscar matérias..." type="text" />
+                </div>
+            </div>
+
+            <div class="flex flex-1 justify-center mx-4">
+                @if (currentView() === 'HOME') {
+                    <div class="flex p-1 bg-slate-100 rounded-md animate-fade-in">
+                        <label class="cursor-pointer" (click)="setMode('VESTIBULAR')">
+                            <input type="radio" name="context" class="peer sr-only"
+                                [checked]="currentMode() === 'VESTIBULAR'" />
+                            <div
+                                class="px-4 py-1.5 rounded-sm text-sm font-medium text-slate-500 peer-checked:bg-white peer-checked:text-primary peer-checked:shadow-sm transition-all">
+                                Vestibular
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer" (click)="setMode('FACULDADE')">
+                            <input type="radio" name="context" class="peer sr-only"
+                                [checked]="currentMode() === 'FACULDADE'" />
+                            <div
+                                class="px-4 py-1.5 rounded-sm text-sm font-medium text-slate-500 peer-checked:bg-white peer-checked:text-primary peer-checked:shadow-sm transition-all">
+                                Faculdade
+                            </div>
+                        </label>
+                    </div>
+                }
+            </div>
+
+            <div class="relative flex items-center gap-4 justify-end flex-1">
+                <button (click)="toggleProfileMenu()" 
+                        class="size-9 rounded-md bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm hover:bg-blue-200 hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer select-none">
+                    {{ deckService.userInitial() }}
+                </button>
+
+                @if (isProfileMenuOpen()) {
+                    <div (click)="toggleProfileMenu()" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
+                    <div class="absolute top-12 right-0 w-48 bg-white rounded-md shadow-xl border border-slate-100 py-2 animate-fade-in-down z-50">
+                        <div class="px-4 py-2 border-b border-slate-100 mb-1">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Minha Conta</p>
+                        </div>
+                        <button (click)="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors cursor-pointer">
+                            <span class="material-symbols-outlined text-[18px]">logout</span>
+                            Sair da conta
+                        </button>
+                    </div>
+                }
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto">
+            
+            <div class="p-6 md:p-8 min-h-[calc(100vh-200px)]">
+                <div class="mx-auto max-w-7xl flex flex-col gap-8">
+
+                    <div class="flex flex-col gap-1 animate-fade-in-down">
+                        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
+                            Oi, <span class="text-primary">{{ deckService.userName() }}</span>! 👋
+                        </h1>
+                        <p class="text-slate-500 text-lg font-medium">
+                            Bora estudar hoje?
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col gap-1 rounded-md border border-slate-200 bg-surface-light p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-orange-500 text-[24px]">local_fire_department</span>
+                                <span class="text-sm font-medium text-slate-500">Sequência</span>
+                            </div>
+                            <span class="text-3xl font-bold text-slate-900">{{ deckService.streakDays() }}</span>
+                        </div>
+
+                        <div class="flex flex-col gap-1 rounded-md border border-slate-200 bg-surface-light p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-blue-500 text-[24px]">fact_check</span>
+                                <span class="text-sm font-medium text-slate-500">Revisadas</span>
+                            </div>
+                            <span class="text-3xl font-bold text-slate-900">{{ deckService.cardsReviewed() }}</span>
+                        </div>
+
+                        <div class="flex flex-col gap-1 rounded-md border border-slate-200 bg-surface-light p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-purple-500 text-[24px]">analytics</span>
+                                <span class="text-sm font-medium text-slate-500">Taxa de Acerto</span>
+                            </div>
+                            <span class="text-3xl font-bold text-slate-900">{{ deckService.masteryLevel() }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-slate-900">
+                            @if(currentView() === 'MY_DECKS') {
+                                Meus Baralhos Criados
+                            } @else {
+                                @if(currentMode() === 'VESTIBULAR') { Matérias do Vestibular }
+                                @else { Matérias da Faculdade }
+                            }
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-8">
+
+                        @for (deck of filteredDecks(); track deck.id) {
+                        <div [routerLink]="['/study', deck.id]"
+                            class="group relative flex flex-col overflow-hidden rounded-md border border-slate-200 bg-surface-light hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+
+                            <div class="relative h-24 w-full overflow-hidden bg-gradient-to-r from-slate-800 to-slate-900">
+                                <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                                
+                                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                                    <span class="inline-flex items-center rounded bg-white/20 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                                        {{ deck.category }}
+                                    </span>
+                                </div>
+
+                                <button (click)="toggleDeckMenu(deck.id, $event)"
+                                        class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-md bg-black/20 text-white hover:bg-white hover:text-slate-900 transition-all z-10">
+                                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                </button>
+                            </div>
+
+                            @if (activeMenuDeckId() === deck.id) {
+                                <div (click)="toggleDeckMenu(deck.id, $event)" class="fixed inset-0 z-20 cursor-default"></div>
+                                <div class="absolute top-10 right-2 w-48 bg-white rounded-md shadow-xl border border-slate-100 py-1 z-30 animate-fade-in-down">
+                                    <button (click)="openAddCardModal(deck.id, $event)" 
+                                            class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-2 transition-colors">
+                                        <span class="material-symbols-outlined text-[18px]">add_card</span>
+                                        Adicionar Cartas
+                                    </button>
+                                    <div class="h-px bg-slate-100 my-1"></div>
+                                    <button (click)="deleteDeck(deck.id, $event)" 
+                                            class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                        Excluir Deck
+                                    </button>
+                                </div>
+                            }
+
+                            <div class="flex flex-1 flex-col justify-between p-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 leading-snug mb-1">{{ deck.title }}</h3>
+                                    <p class="text-sm text-slate-500">{{ deck.cards.length }} cartas</p>
+                                </div>
+                                <div class="mt-4 flex flex-col gap-2">
+                                    <button class="mt-2 flex items-center justify-center w-full rounded-sm bg-primary/10 py-2 text-xs font-bold uppercase tracking-wider text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                        Estudar Agora
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                        <div (click)="openCreateModal()"
+                            class="group flex flex-col items-center justify-center rounded-md border border-dashed border-slate-300 bg-transparent p-6 hover:bg-slate-100 transition-all cursor-pointer min-h-[200px]">
+                            <div class="mb-4 flex size-14 items-center justify-center rounded-md bg-slate-200 text-slate-500 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-[32px]">add</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Criar Baralho</h3>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <footer class="mt-12 bg-primary text-white pt-16 pb-8 font-display rounded-t-lg shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                    
+                    <div class="col-span-1 md:col-span-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="flex items-center justify-center size-10 rounded-md bg-white/10 text-white backdrop-blur-sm border border-white/20">
+                                <span class="material-symbols-outlined text-[28px]">school</span>
+                            </div>
+                            <h2 class="text-2xl font-bold tracking-tight">FlashCards.ai</h2>
+                        </div>
+                        <p class="text-blue-100 max-w-sm leading-relaxed text-sm">
+                            Sua plataforma inteligente para dominar os estudos. Use a repetição espaçada para lembrar de tudo no vestibular e na faculdade.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-widest mb-6 text-blue-200">Navegação</h3>
+                        <ul class="flex flex-col gap-4 font-medium text-sm">
+                            <li><a (click)="setView('HOME')" class="text-blue-100 hover:text-white transition-colors inline-flex items-center gap-2 cursor-pointer hover:translate-x-1 duration-300">Início</a></li>
+                            <li><a (click)="setView('MY_DECKS')" class="text-blue-100 hover:text-white transition-colors inline-flex items-center gap-2 cursor-pointer hover:translate-x-1 duration-300">Meus Baralhos</a></li>
+                            <li><a class="text-blue-100 hover:text-white transition-colors inline-flex items-center gap-2 cursor-pointer hover:translate-x-1 duration-300">Sobre o Projeto</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-widest mb-6 text-blue-200">Recursos</h3>
+                        <ul class="flex flex-col gap-4 font-medium text-sm">
+                            <li><a class="text-blue-100 hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Central de Ajuda</a></li>
+                            <li><a class="text-blue-100 hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Termos de Uso</a></li>
+                            <li><a class="text-blue-100 hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Privacidade</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200">
+                    <p>© 2026 FlashCards.ai. Todos os direitos reservados.</p>
+                    <p class="flex items-center gap-1">
+                        Feito com <span class="material-symbols-outlined text-[16px] text-red-300 fill-1 animate-pulse">favorite</span> para estudantes.
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    @if (isCreateModalOpen()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fade-in">
+            <div class="w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden animate-scale-in">
+                <div class="bg-surface-light border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-800">Novo Baralho</h3>
+                    <button (click)="closeCreateModal()" class="text-slate-400 hover:text-red-500 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="p-6 flex flex-col gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-bold text-slate-700">Nome do Baralho</label>
+                        <input [(ngModel)]="newDeckTitle" type="text" placeholder="Ex: Fórmula 1..." class="w-full rounded-md border border-slate-300 px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" autofocus />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-bold text-slate-700">Categoria</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" [(ngModel)]="newDeckCategory" value="VESTIBULAR" class="peer sr-only">
+                                <div class="rounded-md border border-slate-200 p-3 text-center text-sm font-medium text-slate-500 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all">Vestibular</div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" [(ngModel)]="newDeckCategory" value="FACULDADE" class="peer sr-only">
+                                <div class="rounded-md border border-slate-200 p-3 text-center text-sm font-medium text-slate-500 hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all">Faculdade</div>
+                            </label>
+                        </div>
+                    </div>
+                    <button (click)="saveNewDeck()" [disabled]="!newDeckTitle()" class="w-full rounded-md bg-primary py-3.5 text-sm font-bold text-white shadow-lg hover:bg-primary-hover disabled:opacity-50 mt-2">Criar Baralho</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (isAddCardModalOpen()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fade-in">
+            <div class="w-full max-w-lg bg-white rounded-lg shadow-2xl overflow-hidden animate-scale-in">
+                
+                <div class="bg-surface-light border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-800">Adicionar Carta</h3>
+                    <button (click)="closeAddCardModal()" class="text-slate-400 hover:text-red-500 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="p-6 flex flex-col gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-bold text-slate-700">Frente (Pergunta)</label>
+                        <textarea [(ngModel)]="newCardFront" 
+                                  rows="3" 
+                                  placeholder="Ex: Qual a fórmula da água?" 
+                                  class="w-full rounded-md border border-slate-300 px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"></textarea>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-bold text-slate-700">Verso (Resposta)</label>
+                        <textarea [(ngModel)]="newCardBack" 
+                                  rows="3" 
+                                  placeholder="Ex: H2O" 
+                                  class="w-full rounded-md border border-slate-300 px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"></textarea>
+                    </div>
+
+                    <button (click)="saveNewCard()" 
+                            [disabled]="!newCardFront() || !newCardBack()" 
+                            class="w-full rounded-md bg-primary py-3.5 text-sm font-bold text-white shadow-lg hover:bg-primary-hover disabled:opacity-50 mt-2">
+                        Salvar Carta
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

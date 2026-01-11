@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-background-light flex flex-col font-display text-slate-900">
+  
+  <header class="h-16 flex items-center justify-between px-6 bg-surface-light border-b border-slate-200">
+    <a routerLink="/dashboard" class="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-medium">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Voltar
+    </a>
+    
+    @if (deck()) {
+      <div class="flex flex-col items-center">
+        <h1 class="font-bold text-lg">{{ deck()?.title }}</h1>
+        <span class="text-xs text-slate-400">{{ deck()?.category }}</span>
+      </div>
+    }
+
+    <div class="text-sm font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
+      {{ progress() }}
+    </div>
+  </header>
+
+  <main class="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    
+    @if (isFinished()) {
+      <div class="text-center animate-bounce-in">
+        <div class="size-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-[40px]">emoji_events</span>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Parabéns!</h2>
+        <p class="text-slate-500 mb-6">Você revisou todas as cartas deste baralho.</p>
+        <button (click)="restart()" class="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-hover shadow-lg transition-all">
+          Revisar Novamente
+        </button>
+      </div>
+    } 
+    
+    @else if (currentCard()) {
+      <div class="w-full max-w-2xl h-[400px] perspective-1000 cursor-pointer group" (click)="flipCard()">
+        
+        <div class="relative w-full h-full duration-700 transform-style-3d transition-transform"
+             [class.rotate-y-180]="isFlipped()">
+
+          <div class="absolute w-full h-full backface-hidden bg-surface-light border border-slate-200 rounded-2xl shadow-xl flex flex-col items-center justify-center p-8 text-center">
+            <span class="absolute top-6 left-6 text-xs font-bold text-slate-400 uppercase tracking-widest">Pergunta</span>
+            
+            <h3 class="text-3xl md:text-4xl font-bold text-slate-800">
+              {{ currentCard()?.front }}
+            </h3>
+            
+            <span class="absolute bottom-6 text-sm text-slate-400 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">touch_app</span>
+              Toque para virar
+            </span>
+          </div>
+
+          <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl flex flex-col items-center justify-center p-8 text-center text-white">
+            <span class="absolute top-6 left-6 text-xs font-bold text-slate-500 uppercase tracking-widest">Resposta</span>
+            
+            <p class="text-2xl md:text-3xl font-medium leading-relaxed">
+              {{ currentCard()?.back }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-10 flex gap-4 transition-opacity duration-300"
+           [class.opacity-0]="!isFlipped()" 
+           [class.pointer-events-none]="!isFlipped()">
+        
+        <button (click)="nextCard(false)" class="flex flex-col items-center gap-2 px-6 py-3 rounded-xl bg-red-100 text-red-600 hover:bg-red-200 transition-colors w-24">
+          <span class="material-symbols-outlined">close</span>
+          <span class="text-xs font-bold">Errei</span>
+        </button>
+
+        <button (click)="nextCard(false)" class="flex flex-col items-center gap-2 px-6 py-3 rounded-xl bg-amber-100 text-amber-600 hover:bg-amber-200 transition-colors w-24">
+          <span class="material-symbols-outlined">schedule</span>
+          <span class="text-xs font-bold">Difícil</span>
+        </button>
+
+        <button (click)="nextCard(true)" class="flex flex-col items-center gap-2 px-6 py-3 rounded-xl bg-green-100 text-green-600 hover:bg-green-200 transition-colors w-24">
+          <span class="material-symbols-outlined">check</span>
+          <span class="text-xs font-bold">Fácil</span>
+        </button>
+      </div>
+    } 
+    @else {
+      <div class="text-center text-slate-500 animate-pulse">
+        <p>Carregando carta...</p>
+      </div>
+    }
+
+  </main>
+</div>
