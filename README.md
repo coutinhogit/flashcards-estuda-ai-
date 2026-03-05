@@ -1,6 +1,7 @@
-# 🗂️ FlashCards.ai - MVP
+🗂️ FlashCards.ai - MVP
 
-![Preview do Projeto](https://i.ibb.co/xp0zdC2/Captura-de-tela-2026-01-11-155628.png)
+## Preview do Projeto
+| ![Dashboard](https://i.ibb.co/Zpjc7mBn/Captura-de-tela-2026-03-05-183212.png)
 
 ## 🔗 Acesse o Projeto
  **Link Online:** [FlashCards.Ai](https://flash-cards-estuda-ai-fn7j.vercel.app/login)
@@ -39,12 +40,12 @@ Abaixo, os registros da interface e fluxo de usuário no estado atual do MVP:
 
 | Dashboard | Meus Baralhos |
 | :--- | :--- |
-| ![Dashboard](https://i.ibb.co/DD83Wyqs/Captura-de-tela-2026-01-11-160033.png) | ![Meus Baralhos](https://i.ibb.co/xtq0W1f0/Captura-de-tela-2026-01-11-160124.png) |
+| ![Dashboard](https://i.ibb.co/Zpjc7mBn/Captura-de-tela-2026-03-05-183212.png) | ![Meus Baralhos](https://i.ibb.co/7tznMW4k/Captura-de-tela-2026-03-05-183259.png) |
 | *Visão geral do progresso e métricas de estudo* | *Gerenciamento e organização de matérias* |
 
 | Estudo Ativo | Cadastro de Cards |
 | :--- | :--- |
-| ![Sessão](https://i.ibb.co/dsfwyS2v/Captura-de-tela-2026-01-11-160304.png) | ![Cards](https://i.ibb.co/VpNMjrP8/Captura-de-tela-2026-01-11-160408.png) |
+| ![Sessão](https://i.ibb.co/VWtbMCft/Captura-de-tela-2026-03-05-183336.png) | ![Cards](https://i.ibb.co/NgVcrdJd/Captura-de-tela-2026-03-05-183149.png) |
 | *Interface dos cards* | *Fluxo de criação rápida de novos conteúdos* |
 
 ---
